@@ -4,15 +4,15 @@ import 'package:news_portal/presentation/login/login_screen.dart';
 import 'package:news_portal/presentation/main_list/news_list_screen.dart';
 
 final appRouter = GoRouter(
-  initialLocation: AppRoute.login.path,
+  initialLocation: AppRoute.login.Path,
   routes: [
     GoRoute(
-      path: AppRoute.login.path,
-      name: AppRoute.newsList.name,
+      path: AppRoute.login.Path,
+      name: AppRoute.login.name,
       builder: (context, state) => LoginScreen(),
     ),
     GoRoute(
-      path: AppRoute.newsList.path,
+      path: AppRoute.newsList.Path,
       name: AppRoute.newsList.name,
       pageBuilder: (context, state) {
         return CustomTransitionPage(
@@ -35,5 +35,5 @@ final appRouter = GoRouter(
 enum AppRoute { login, newsList }
 
 extension AppRouteExtension on AppRoute {
-  String get path => '/$this';
+  String get Path => '/$this';
 }
