@@ -22,7 +22,7 @@ class NewsApi {
     /* 1번째 방법
     for (var i = 0; i < newsRaw.length; i++) {
       final raw = newsRaw;
-      final data = NewsData.fromMap(RawAutocomplete);
+      final data = NewsData.fromMap(raw);
       newsList.add(data);
     }
 */
