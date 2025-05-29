@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:news_portal/presentation/login/login_screen.dart';
-import 'package:news_portal/presentation/main_list/news_list_screen.dart';
+import 'package:news_portal/presentation/news_list/news_list_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: AppRoute.login.Path,

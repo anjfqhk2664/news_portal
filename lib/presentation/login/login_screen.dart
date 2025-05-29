@@ -8,7 +8,6 @@ import 'package:news_portal/presentation/app/router/app_router.dart';
 import 'package:news_portal/presentation/app/translations/app_trans.dart';
 import 'package:news_portal/presentation/app/widget/app_logo.dart';
 import 'package:news_portal/presentation/app/widget/app_scaffold.dart';
-import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,31 +22,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    // 미리 선언
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  //NOTE 로그인
-  void onLogin() async {
+  void _onLogin() async {
     final email = _emailController.text;
     final password = _passwordController.text;
-
-    final auth = await AuthApi.login(email: email, password: password);
-
+    final auth = AuthApi.login(email: email, password: password);
     if (auth == null) return;
     if (!mounted) return;
-
     context.goNamed(AppRoute.newsList.name);
   }
 
   TextField _textField({
     required TextEditingController controller,
     required String hintText,
+    bool obscure = false,
   }) {
     return TextField(
       controller: controller,
+      obscureText: obscure,
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         hintText: hintText,
@@ -58,88 +54,66 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      appBar: AppBar(),
       child: Padding(
-        padding: const EdgeInsets.all(30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            //#region 로고
-            AppLogo(),
-            //#endregion
-
-            //#region Welcome 타이틀
-            Container(
-              height: 250,
-              alignment: Alignment.center,
-              child: Text(
-                AppTrans.login.welcome.tr(),
-                style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+        padding: EdgeInsets.all(30),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AppLogo(),
+              Container(
+                height: 250,
+                alignment: Alignment.center,
+                child: Text(
+                  AppTrans.login.welcome.tr(),
+                  style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            //#endregion
-
-            //#region 이메일 입력
-            _textField(
-              controller: _emailController,
-              hintText: AppTrans.login.email.tr(),
-            ),
-
-            //#endregion
-            20.heightBox,
-
-            //#region 패스워드 입력
-            _textField(
-              controller: _passwordController,
-              hintText: AppTrans.login.password.tr(),
-            ),
-
-            //#endregion
-            20.heightBox,
-
-            //#region 로그인 버튼
-            SizedBox(
-              height: 55,
-              child: ElevatedButton(
-                onPressed: onLogin,
-                child: Text(AppTrans.login.login.tr()),
+              _textField(
+                controller: _emailController,
+                hintText: AppTrans.login.email.tr(),
               ),
-            ),
-            //#endregion
-
-            //#region Or use 구분선
-            Container(
-              height: 70,
-              alignment: Alignment.center,
-              child: Row(
-                spacing: 10,
-                children: [
-                  Expanded(child: Divider()),
-                  Text(AppTrans.login.orUse.tr()),
-                  Expanded(child: Divider()),
-                ],
+              20.heightBox,
+              _textField(
+                controller: _passwordController,
+                obscure: true,
+                hintText: AppTrans.login.password.tr(),
               ),
-            ),
-            //#endregion
-
-            //#region 구글 로그인
-            buildSsoButton('Goole'),
-
-            //#endregion
-            10.heightBox,
-
-            //#region 애플 로그인
-            buildSsoButton('Apple'),
-            //#endregion
-          ],
+              20.heightBox,
+              SizedBox(
+                height: 55,
+                child: ElevatedButton(
+                  onPressed: _onLogin,
+                  child: Text(AppTrans.login.login.tr()),
+                ),
+              ),
+              Container(
+                height: 70,
+                alignment: Alignment.center,
+                child: Row(
+                  spacing: 10,
+                  children: [
+                    Expanded(child: Divider()),
+                    Text(AppTrans.login.orUse.tr()),
+                    Expanded(child: Divider()),
+                  ],
+                ),
+              ),
+              _buildSsoButton('Google'),
+              10.heightBox,
+              _buildSsoButton('Apple'),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  OutlinedButton buildSsoButton(String sso) {
+  OutlinedButton _buildSsoButton(String sso) {
     final logoUrl = {
       'Google':
-          '://daelim-doc.fleecy.dev/raiz5jee8eiph0eeFooV/api/v1/projects/866715/resources/354903/image-preview?onlineShareType=apidoc&locale=en-US',
+          'https://daelim-doc.fleecy.dev/raiz5jee8eiph0eeFooV/api/v1/projects/866715/resources/354903/image-preview?onlineShareType=apidoc&locale=en-US',
       'Apple':
           'https://api.apidog.com/api/v1/projects/866715/resources/354902/image-preview',
     };
